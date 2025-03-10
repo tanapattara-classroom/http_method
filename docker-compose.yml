@@ -1,0 +1,56 @@
+version: "3.8"
+
+# Docker Compose configuration for Notes API
+#
+# Common commands:
+# - Start the application:    docker-compose up -d
+# - Stop the application:     docker-compose down
+# - Restart the application:  docker-compose restart
+# - View logs:                docker-compose logs -f app
+# - Initialize database:      docker-compose exec app npm run init-db
+# - App shell:                docker-compose exec app /bin/sh
+# - MongoDB shell:            docker-compose exec mongo mongo
+# - Install dependencies:     docker-compose exec app sh /app/install-deps.sh
+
+services:
+  # Node.js application
+  app:
+    build: .
+    container_name: notes-api
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - MONGODB_URI=mongodb://mongo:27017/notes-api
+      - NODE_ENV=production
+      - JWT_SECRET=your_jwt_secret_key_here
+      - JWT_EXPIRES_IN=5m
+    depends_on:
+      - mongo
+    networks:
+      - notes-network
+    volumes:
+      - ./:/app
+      # Exclude node_modules from being overwritten by the host
+      - /app/node_modules
+
+  # MongoDB service
+  mongo:
+    image: mongo:6.0
+    container_name: notes-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - notes-network
+
+networks:
+  notes-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local
