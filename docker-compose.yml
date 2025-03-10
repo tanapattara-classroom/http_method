@@ -11,6 +11,7 @@ version: "3.8"
 # - App shell:                docker-compose exec app /bin/sh
 # - MongoDB shell:            docker-compose exec mongo mongo
 # - Install dependencies:     docker-compose exec app sh /app/install-deps.sh
+# - API Documentation:        http://localhost:3000/api-docs
 
 services:
   # Node.js application

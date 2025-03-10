@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
+const path = require("path");
+const fs = require("fs");
 
 // Load environment variables
 dotenv.config();
@@ -21,13 +23,32 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, "public")));
+
+// Serve Swagger documentation
+app.get("/swagger.json", (req, res) => {
+  const swaggerDocument = JSON.parse(
+    fs.readFileSync(path.join(__dirname, "swagger.json"), "utf8")
+  );
+  res.json(swaggerDocument);
+});
+
+// API Documentation route
+app.get("/api-docs", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "api-docs", "index.html"));
+});
+
 // Routes
 app.use("/api/notes", noteRoutes);
 app.use("/api/auth", authRoutes);
 
 // Root route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to Notes API" });
+  res.json({
+    message: "Welcome to Notes API",
+    documentation: `${req.protocol}://${req.get("host")}/api-docs`,
+  });
 });
 
 // Connect to MongoDB
@@ -38,6 +59,9 @@ mongoose
     // Start server
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
+      console.log(
+        `API Documentation available at http://localhost:${PORT}/api-docs`
+      );
     });
   })
   .catch((err) => {

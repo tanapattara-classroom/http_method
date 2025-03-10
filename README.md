@@ -11,6 +11,7 @@ A RESTful API service for managing notes with CRUD operations built with Node.js
 - RESTful API design
 - Error handling
 - Docker support for easy deployment
+- Interactive API documentation with Swagger UI
 
 ## Prerequisites
 
@@ -121,6 +122,22 @@ Open a MongoDB shell:
 ```
 docker-compose exec mongo mongo
 ```
+
+## API Documentation
+
+The API documentation is available at:
+
+```
+http://localhost:3000/api-docs
+```
+
+This interactive documentation is built with Swagger UI and provides:
+
+- Detailed information about all API endpoints
+- Request and response examples
+- Authentication requirements
+- Schema definitions
+- Try-it-out functionality to test the API directly from the browser
 
 ## Troubleshooting
 
