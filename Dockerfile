@@ -19,7 +19,7 @@ RUN chmod +x install-deps.sh
 EXPOSE 3000
 
 # Set the entrypoint script
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 # Command to run the application
 CMD ["npm", "start"] 
